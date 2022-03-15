@@ -18,19 +18,23 @@ import com.gabriel.teste.ScoreDescricao.ScoreRecomendavel;
 import com.gabriel.teste.ScoreDescricao.SemScore;
 import com.gabriel.teste.ScoreDescricao.ValidaScoreDescricao;
 
-import lombok.AllArgsConstructor;
-
 @Service
-@AllArgsConstructor
 public class PessoaService {
 
 	private PessoaRepository pessoaRepository;
 
+	public PessoaService(PessoaRepository pessoaRepository) {
+		this.pessoaRepository = pessoaRepository;
+	}
+
 	@Transactional
-	public List<Pessoa> findAllPessoas() {
+	public ResponseEntity<List<Pessoa>> findAllPessoas() {
 		List<Pessoa> pessoas = pessoaRepository.findAll();
+		if(pessoas == null || pessoas.isEmpty() ) {
+			return new ResponseEntity<>(pessoas, HttpStatus.NO_CONTENT);
+		}
 		pessoas.stream().map(pessoa -> validarPontuacaoScore(pessoa)).collect(Collectors.toList());
-		return pessoas;
+		return new ResponseEntity<>(pessoas, HttpStatus.OK);
 	}
 
 	@Transactional

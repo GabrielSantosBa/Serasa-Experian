@@ -31,8 +31,7 @@ public class Pessoa {
 	private int idade;
 	
 	private String cidade;
-	private String estado;
-	@JsonIgnore
+	private String estado;	
 	private Integer score;
 	
 	@Transient
